@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Devayan Mandal</title>
 <meta name="description" content="Devayan Mandal (Dev M). Full stack AI native engineer and open source contributor based in Mumbai, India.">
-<meta name="theme-color" content="#07090d">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07090d" id="theme-color">
+<meta name="color-scheme" content="dark light">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
+  :root, [data-theme="dark"] {
     --bg: #07090d;
     --bg-elevated: #0c1017;
     --ink: #e8edf5;
@@ -21,8 +21,45 @@
     --accent-dim: rgba(92, 225, 255, 0.14);
     --accent-glow: rgba(92, 225, 255, 0.35);
     --ok: #54f0a8;
-    --warn: #ffd166;
+    --card: rgba(92, 225, 255, 0.03);
+    --card-hover: rgba(92, 225, 255, 0.06);
+    --boot-bg: #05070a;
+    --boot-panel: linear-gradient(180deg, rgba(12, 16, 23, 0.95), rgba(7, 9, 13, 0.98));
+    --img-fade: linear-gradient(180deg, transparent 40%, rgba(7, 9, 13, 0.92) 100%);
+    --toggle-bg: rgba(255,255,255,0.06);
+    --toggle-border: rgba(92, 225, 255, 0.25);
+    --grid-a: rgba(92, 225, 255, 0.12);
+    --grid-b: rgba(84, 240, 168, 0.05);
+    --grid-line: rgba(92, 225, 255, 0.03);
+    --scan: rgba(0, 0, 0, 0.03);
+    --lede: #c5cedd;
+    --body: #b7c0d0;
     --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  [data-theme="light"] {
+    --bg: #f4f6fa;
+    --bg-elevated: #ffffff;
+    --ink: #12161e;
+    --muted: #5c6675;
+    --line: rgba(20, 40, 80, 0.12);
+    --accent: #0b6bcb;
+    --accent-dim: rgba(11, 107, 203, 0.08);
+    --accent-glow: rgba(11, 107, 203, 0.22);
+    --ok: #0d9f6e;
+    --card: #ffffff;
+    --card-hover: #f0f5fb;
+    --boot-bg: #eef2f8;
+    --boot-panel: linear-gradient(180deg, #fff, #f6f8fc);
+    --img-fade: linear-gradient(180deg, transparent 35%, rgba(244, 246, 250, 0.95) 100%);
+    --toggle-bg: rgba(0,0,0,0.04);
+    --toggle-border: rgba(11, 107, 203, 0.28);
+    --grid-a: rgba(11, 107, 203, 0.08);
+    --grid-b: rgba(13, 159, 110, 0.04);
+    --grid-line: rgba(20, 40, 80, 0.045);
+    --scan: rgba(0, 0, 0, 0.015);
+    --lede: #2a3342;
+    --body: #3d4758;
   }
 
   * { box-sizing: border-box; }
@@ -32,12 +69,12 @@
     min-height: 100vh;
     background: var(--bg);
     color: var(--ink);
-    font: 15px/1.7 var(--mono);
+    font: 15px/1.65 var(--mono);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    transition: background 0.35s ease, color 0.35s ease;
   }
 
-  /* Ambient grid + glow */
   body::before {
     content: "";
     position: fixed;
@@ -45,10 +82,10 @@
     pointer-events: none;
     z-index: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(92, 225, 255, 0.12), transparent 55%),
-      radial-gradient(ellipse 40% 30% at 90% 80%, rgba(84, 240, 168, 0.05), transparent 50%),
-      linear-gradient(rgba(92, 225, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(92, 225, 255, 0.03) 1px, transparent 1px);
+      radial-gradient(ellipse 80% 50% at 50% -20%, var(--grid-a), transparent 55%),
+      radial-gradient(ellipse 40% 30% at 90% 80%, var(--grid-b), transparent 50%),
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size: auto, auto, 48px 48px, 48px 48px;
     mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
     animation: gridDrift 40s linear infinite;
@@ -57,25 +94,59 @@
     from { background-position: 0 0, 0 0, 0 0, 0 0; }
     to { background-position: 0 0, 0 0, 0 48px, 48px 0; }
   }
-
-  /* Scanline overlay */
   body::after {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 50;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.03) 2px,
-      rgba(0, 0, 0, 0.03) 4px
-    );
-    opacity: 0.5;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scan) 2px, var(--scan) 4px);
+    opacity: 0.55;
   }
 
-  /* ========== BOOT SCREEN ========== */
+  /* Theme toggle */
+  .theme-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid var(--toggle-border);
+    background: var(--toggle-bg);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .theme-toggle button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font: 600 11px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  }
+  .theme-toggle button[aria-pressed="true"] {
+    background: var(--accent-dim);
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px rgba(92, 225, 255, 0.25);
+  }
+  [data-theme="light"] .theme-toggle button[aria-pressed="true"] {
+    box-shadow: inset 0 0 0 1px rgba(11, 107, 203, 0.28);
+  }
+  .theme-toggle button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Boot */
   #boot {
     position: fixed;
     inset: 0;
@@ -83,20 +154,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #05070a;
+    background: var(--boot-bg);
     transition: opacity 0.7s ease, visibility 0.7s ease;
   }
-  #boot.done {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
+  #boot.done { opacity: 0; visibility: hidden; pointer-events: none; }
   .boot-panel {
-    width: min(440px, calc(100vw - 40px));
+    width: min(420px, calc(100vw - 40px));
     border: 1px solid var(--line);
-    background: linear-gradient(180deg, rgba(12, 16, 23, 0.95), rgba(7, 9, 13, 0.98));
-    box-shadow: 0 0 0 1px rgba(92, 225, 255, 0.06), 0 0 60px rgba(92, 225, 255, 0.08);
-    padding: 28px 26px 24px;
+    background: var(--boot-panel);
+    box-shadow: 0 0 0 1px var(--accent-dim), 0 0 60px var(--accent-glow);
+    padding: 26px 24px 22px;
     position: relative;
     overflow: hidden;
   }
@@ -105,443 +172,401 @@
     position: absolute;
     top: 0; left: -40%;
     width: 40%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(92, 225, 255, 0.08), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
     animation: sweep 2.2s ease-in-out infinite;
   }
-  @keyframes sweep {
-    0% { left: -40%; }
-    100% { left: 120%; }
-  }
+  @keyframes sweep { 0% { left: -40%; } 100% { left: 120%; } }
   .boot-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
   }
-  .boot-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--accent);
-  }
+  .boot-status { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); }
   .boot-status .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 10px var(--accent-glow);
-    animation: pulse 1.2s ease-in-out infinite;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow); animation: pulse 1.2s ease-in-out infinite;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.45; transform: scale(0.85); }
   }
   .boot-logo {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: var(--ink);
-    margin-bottom: 18px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.2em;
+    color: var(--ink); margin-bottom: 16px;
   }
   .boot-logo span { color: var(--accent); }
-  .boot-lines {
-    min-height: 120px;
-    font-size: 12px;
-    line-height: 1.85;
-    color: var(--muted);
-  }
+  .boot-lines { min-height: 96px; font-size: 12px; line-height: 1.85; color: var(--muted); }
   .boot-lines .line { opacity: 0; transform: translateY(4px); }
-  .boot-lines .line.show {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
+  .boot-lines .line.show { opacity: 1; transform: none; transition: opacity 0.25s ease, transform 0.25s ease; }
   .boot-lines .ok { color: var(--ok); }
   .boot-lines .accent { color: var(--accent); }
   .boot-lines .cursor {
-    display: inline-block;
-    width: 8px; height: 13px;
-    background: var(--accent);
-    vertical-align: text-bottom;
-    margin-left: 2px;
-    animation: blink 0.9s step-end infinite;
+    display: inline-block; width: 8px; height: 13px; background: var(--accent);
+    vertical-align: text-bottom; margin-left: 2px; animation: blink 0.9s step-end infinite;
   }
-  @keyframes blink {
-    50% { opacity: 0; }
-  }
+  @keyframes blink { 50% { opacity: 0; } }
   .boot-bar {
-    margin-top: 22px;
-    height: 3px;
-    background: rgba(92, 225, 255, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
+    margin-top: 18px; height: 3px; background: var(--accent-dim);
+    border-radius: 2px; overflow: hidden;
   }
   .boot-bar > i {
-    display: block;
-    height: 100%;
-    width: 0%;
+    display: block; height: 100%; width: 0%;
     background: linear-gradient(90deg, var(--accent), var(--ok));
-    box-shadow: 0 0 12px var(--accent-glow);
-    transition: width 0.35s ease;
+    box-shadow: 0 0 12px var(--accent-glow); transition: width 0.35s ease;
   }
-  .boot-pct {
-    margin-top: 10px;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-  }
+  .boot-pct { margin-top: 10px; font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
 
-  /* ========== MAIN ========== */
   .wrap {
-    position: relative;
-    z-index: 1;
-    max-width: 720px;
-    margin: 0 auto;
+    position: relative; z-index: 1;
+    max-width: 760px; margin: 0 auto;
     padding: 72px 24px 110px;
-    opacity: 0;
-    transform: translateY(12px);
+    opacity: 0; transform: translateY(12px);
     transition: opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s;
   }
-  body.ready .wrap {
-    opacity: 1;
-    transform: none;
-  }
+  body.ready .wrap { opacity: 1; transform: none; }
 
-  header { margin-bottom: 48px; }
+  header { margin-bottom: 40px; padding-right: 120px; }
   .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: var(--accent-dim);
-    border: 1px solid rgba(92, 225, 255, 0.22);
-    padding: 6px 12px;
-    border-radius: 999px;
-    margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-dim);
+    border: 1px solid var(--toggle-border);
+    padding: 6px 12px; border-radius: 999px; margin-bottom: 20px;
   }
   .badge .live {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--ok);
-    box-shadow: 0 0 8px rgba(84, 240, 168, 0.7);
-    animation: pulse 1.6s ease-in-out infinite;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--ok);
+    box-shadow: 0 0 8px var(--ok); animation: pulse 1.6s ease-in-out infinite;
   }
-
   h1 {
-    font-size: clamp(28px, 5vw, 36px);
-    line-height: 1.15;
-    margin: 0 0 8px;
-    letter-spacing: -0.03em;
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff 20%, var(--accent) 140%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    font-size: clamp(28px, 5vw, 36px); line-height: 1.15;
+    margin: 0 0 8px; letter-spacing: -0.03em; font-weight: 700;
+    background: linear-gradient(135deg, var(--ink) 20%, var(--accent) 140%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .aka {
-    color: var(--muted);
-    font-size: 13px;
-    margin: 0 0 20px;
-    letter-spacing: 0.04em;
-  }
-  .lede {
-    font-size: 15px;
-    margin: 0 0 24px;
-    color: #c5cedd;
-    max-width: 38em;
-  }
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 8px;
-    font-size: 13px;
-  }
+  .aka { color: var(--muted); font-size: 13px; margin: 0 0 16px; letter-spacing: 0.04em; }
+  .lede { font-size: 15px; margin: 0 0 22px; color: var(--lede); max-width: 36em; }
+  .links { display: flex; flex-wrap: wrap; gap: 10px 8px; font-size: 13px; }
   .links a {
-    color: var(--accent);
-    text-decoration: none;
-    padding: 8px 12px;
-    border: 1px solid rgba(92, 225, 255, 0.2);
-    background: rgba(92, 225, 255, 0.04);
-    border-radius: 6px;
+    color: var(--accent); text-decoration: none;
+    padding: 8px 12px; border: 1px solid var(--toggle-border);
+    background: var(--accent-dim); border-radius: 6px;
     transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   }
   .links a:hover {
-    background: rgba(92, 225, 255, 0.12);
-    border-color: rgba(92, 225, 255, 0.45);
-    box-shadow: 0 0 20px rgba(92, 225, 255, 0.15);
-    transform: translateY(-1px);
+    box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-1px);
   }
 
-  section { margin-top: 8px; }
-  .reveal {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.65s ease, transform 0.65s ease;
-  }
-  .reveal.in {
-    opacity: 1;
-    transform: none;
-  }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.in { opacity: 1; transform: none; }
 
   h2 {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--accent);
-    font-weight: 600;
-    margin: 52px 0 18px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+    color: var(--accent); font-weight: 600;
+    margin: 48px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 10px;
   }
-  h2::before {
-    content: "//";
-    color: var(--muted);
-    letter-spacing: 0;
-    opacity: 0.7;
-  }
+  h2::before { content: "//"; color: var(--muted); letter-spacing: 0; opacity: 0.7; }
 
-  p { margin: 0 0 16px; color: #b7c0d0; }
-  p strong, .stat strong { color: var(--ink); font-weight: 600; }
+  p { margin: 0 0 14px; color: var(--body); }
+  .stat strong, p strong { color: var(--ink); font-weight: 600; }
 
-  ul { list-style: none; padding: 0; margin: 0; }
-  li {
-    padding: 16px 14px;
-    margin: 0 -14px;
-    border-bottom: 1px solid var(--line);
-    border-radius: 8px;
-    transition: background 0.25s, box-shadow 0.25s, border-color 0.25s;
+  /* Project grid */
+  .work-grid {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;
   }
-  li:last-child { border-bottom: 1px solid var(--line); }
-  li:hover {
-    background: rgba(92, 225, 255, 0.04);
-    box-shadow: inset 2px 0 0 var(--accent);
+  .work-grid li {
+    margin: 0; padding: 0; border: 1px solid var(--line);
+    border-radius: 12px; overflow: hidden; background: var(--card);
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s, background 0.25s;
   }
-  .repo { font-weight: 600; font-size: 14px; color: var(--ink); }
-  .repo a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.2s;
+  .work-grid li:hover {
+    transform: translateY(-3px);
+    border-color: var(--toggle-border);
+    box-shadow: 0 12px 40px var(--accent-glow);
+    background: var(--card-hover);
   }
+  .work-grid a.card {
+    display: block; color: inherit; text-decoration: none; height: 100%;
+  }
+  .thumb {
+    position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+    background: var(--bg-elevated);
+  }
+  .thumb img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.5s ease;
+  }
+  .work-grid li:hover .thumb img { transform: scale(1.04); }
+  .thumb::after {
+    content: ""; position: absolute; inset: 0; background: var(--img-fade); pointer-events: none;
+  }
+  .card-body { padding: 14px 14px 16px; }
+  .card-body .repo { font-weight: 600; font-size: 14px; color: var(--ink); margin: 0 0 4px; }
+  .card-body .what { color: var(--muted); font-size: 12px; line-height: 1.55; margin: 0; }
+
+  /* OSS list */
+  .oss { list-style: none; padding: 0; margin: 0; }
+  .oss li {
+    padding: 12px 12px; margin: 0 -12px;
+    border-bottom: 1px solid var(--line); border-radius: 8px;
+    transition: background 0.25s, box-shadow 0.25s;
+  }
+  .oss li:hover { background: var(--accent-dim); box-shadow: inset 2px 0 0 var(--accent); }
+  .repo { font-weight: 600; font-size: 13px; color: var(--ink); }
+  .repo a { color: inherit; text-decoration: none; }
   .repo a:hover { color: var(--accent); }
-  .count {
-    color: var(--muted);
-    font-weight: 400;
-    font-size: 12px;
-  }
-  .what {
-    color: var(--muted);
-    font-size: 13px;
-    margin-top: 4px;
-    line-height: 1.65;
-  }
+  .count { color: var(--muted); font-weight: 400; font-size: 12px; }
+  .what { color: var(--muted); font-size: 12px; margin-top: 2px; line-height: 1.55; }
   .stat {
-    font-size: 13px;
-    color: var(--muted);
-    margin: 0 0 18px;
-    padding: 14px 16px;
-    border: 1px solid var(--line);
-    background: rgba(92, 225, 255, 0.03);
-    border-radius: 8px;
+    font-size: 13px; color: var(--muted); margin: 0 0 16px;
+    padding: 12px 14px; border: 1px solid var(--line);
+    background: var(--accent-dim); border-radius: 8px;
   }
   .stat a, footer a, p a {
-    color: var(--accent);
-    text-decoration: none;
+    color: var(--accent); text-decoration: none;
     border-bottom: 1px solid transparent;
     transition: border-color 0.2s, text-shadow 0.2s;
   }
   .stat a:hover, footer a:hover, p a:hover {
-    border-bottom-color: var(--accent);
-    text-shadow: 0 0 12px var(--accent-glow);
+    border-bottom-color: var(--accent); text-shadow: 0 0 12px var(--accent-glow);
   }
 
   footer {
-    margin-top: 56px;
-    padding-top: 22px;
-    border-top: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 0.02em;
+    margin-top: 52px; padding-top: 20px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12px;
   }
 
-  @media (max-width: 520px) {
-    .wrap { padding: 48px 18px 80px; }
-    .links a { width: 100%; text-align: center; }
+  @media (max-width: 640px) {
+    .work-grid { grid-template-columns: 1fr; }
+    header { padding-right: 0; }
+    .theme-toggle { top: 12px; right: 12px; }
+    .wrap { padding: 64px 18px 80px; }
+    .links a { flex: 1 1 auto; text-align: center; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation: none !important;
-      transition: none !important;
-    }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
     #boot { display: none !important; }
     .wrap, .reveal { opacity: 1 !important; transform: none !important; }
   }
 </style>
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("theme");
+      var prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+      var theme = saved || (prefersLight ? "light" : "dark");
+      document.documentElement.setAttribute("data-theme", theme);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
+<div class="theme-toggle" role="group" aria-label="Color theme">
+  <button type="button" id="theme-dark" aria-pressed="true">Dark</button>
+  <button type="button" id="theme-light" aria-pressed="false">Light</button>
+</div>
+
 <div id="boot" role="status" aria-live="polite" aria-label="Loading">
   <div class="boot-panel">
     <div class="boot-header">
-      <span class="boot-status"><span class="dot" aria-hidden="true"></span> boot sequence</span>
-      <span>v2.6.0</span>
+      <span class="boot-status"><span class="dot" aria-hidden="true"></span> boot</span>
+      <span>v2.7.0</span>
     </div>
     <div class="boot-logo">DEV<span>TECH</span>EDGE</div>
     <div class="boot-lines" id="boot-lines"></div>
     <div class="boot-bar"><i id="boot-fill"></i></div>
-    <div class="boot-pct"><span id="boot-pct">0</span>% &mdash; initializing runtime</div>
+    <div class="boot-pct"><span id="boot-pct">0</span>%</div>
   </div>
 </div>
 
 <div class="wrap">
 
 <header class="reveal">
-  <div class="badge"><span class="live" aria-hidden="true"></span> systems online</div>
+  <div class="badge"><span class="live" aria-hidden="true"></span> online</div>
   <h1>Devayan Mandal</h1>
-  <p class="aka">Dev M &middot; Mumbai, India &middot; AI-native full stack</p>
-  <p class="lede">Full stack AI native engineer and open source contributor. I build production AI systems, developer tooling, and full-stack products end to end.</p>
+  <p class="aka">Dev M &middot; Mumbai &middot; AI-native full stack</p>
+  <p class="lede">I ship production AI systems, developer tooling, and full-stack products. Upstream contributor when the tools I use break.</p>
   <nav class="links">
     <a href="https://github.com/devtechedge">GitHub</a>
     <a href="https://www.linkedin.com/in/dev-ma">LinkedIn</a>
-    <a href="mailto:devtechedge@gmail.com">devtechedge@gmail.com</a>
+    <a href="mailto:devtechedge@gmail.com">Email</a>
   </nav>
 </header>
 
 <section class="reveal">
   <h2>About</h2>
-  <p>I run Lattice AI Labs, an independent software consultancy. Most of my work is full stack: TypeScript and Python on the product side, Rust and systems programming when the problem calls for it.</p>
-  <p>Focus is bounded autonomy: explicit state machines over opaque prompt chains, deterministic evaluation over fuzzy judgment, and observable execution with clear human oversight. I have shipped 35+ production-grade systems spanning agents, MCP, RLVR eval, realtime infra, and Web3.</p>
-  <p>I contribute upstream to the tools I depend on. Fixing a real bug in a widely used library and getting it merged teaches more than building another demo.</p>
+  <p>Lattice AI Labs. TypeScript and Python on the product side; Rust when the problem needs it.</p>
+  <p>Bounded autonomy, deterministic eval, observable execution. 35+ systems shipped across agents, MCP, RLVR, realtime, and Web3.</p>
 </section>
 
 <section class="reveal">
   <h2>Selected work</h2>
-  <ul>
+  <ul class="work-grid">
     <li>
-      <div class="repo"><a href="https://github.com/devtechedge/aegis_vercel">AEGIS</a></div>
-      <div class="what">Multi-agent ops cortex with supervisor routing, HITL gates, Hybrid RAG, and live SSE telemetry.</div>
+      <a class="card" href="https://github.com/devtechedge/aegis_vercel">
+        <div class="thumb"><img src="docs/screenshots/aegis.png" alt="AEGIS on GitHub" width="1200" height="600" loading="lazy"></div>
+        <div class="card-body">
+          <div class="repo">AEGIS</div>
+          <p class="what">Multi-agent ops cortex. Supervisor routing, HITL, Hybrid RAG, live SSE.</p>
+        </div>
+      </a>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/devtechedge/synthesis">Synthesis</a></div>
-      <div class="what">Autonomous research pipeline with Reflexion, HITL approval, RAG, and a streaming eval gate.</div>
+      <a class="card" href="https://github.com/devtechedge/synthesis">
+        <div class="thumb"><img src="docs/screenshots/synthesis.png" alt="Synthesis on GitHub" width="1200" height="600" loading="lazy"></div>
+        <div class="card-body">
+          <div class="repo">Synthesis</div>
+          <p class="what">Autonomous research. Reflexion, HITL, RAG, streaming eval gate.</p>
+        </div>
+      </a>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/devtechedge/aarop">AAROP</a></div>
-      <div class="what">Inspectable Perceive&ndash;Plan&ndash;Act&ndash;Observe&ndash;Reflect&ndash;Adapt engine with 99% Python test coverage.</div>
+      <a class="card" href="https://github.com/devtechedge/aarop">
+        <div class="thumb"><img src="docs/screenshots/aarop.png" alt="AAROP on GitHub" width="1200" height="600" loading="lazy"></div>
+        <div class="card-body">
+          <div class="repo">AAROP</div>
+          <p class="what">Inspectable PPAORA loop. 99% Python coverage, live Next.js demo.</p>
+        </div>
+      </a>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/devtechedge/healthcare-deep-memory-agents">Cadence</a></div>
-      <div class="what">Framework-free healthcare agent with five-layer clinical memory and consent-scoped briefs.</div>
+      <a class="card" href="https://github.com/devtechedge/healthcare-deep-memory-agents">
+        <div class="thumb"><img src="docs/screenshots/cadence.png" alt="Cadence on GitHub" width="1200" height="600" loading="lazy"></div>
+        <div class="card-body">
+          <div class="repo">Cadence</div>
+          <p class="what">Healthcare agent. Five-layer memory, consent-scoped briefs.</p>
+        </div>
+      </a>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/devtechedge/chaos-simulator">Chaos Simulator</a></div>
-      <div class="what">Real-time chaos engineering dashboard with animated topology and live recovery telemetry.</div>
+      <a class="card" href="https://github.com/devtechedge/chaos-simulator">
+        <div class="thumb"><img src="docs/screenshots/chaos.png" alt="Chaos Simulator on GitHub" width="1200" height="600" loading="lazy"></div>
+        <div class="card-body">
+          <div class="repo">Chaos Simulator</div>
+          <p class="what">Realtime chaos dashboard. Topology, heal loops, live telemetry.</p>
+        </div>
+      </a>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/devtechedge/job-board">Jobrow</a></div>
-      <div class="what">Table-first index of 5,000+ open US tech roles from public Greenhouse, Ashby, and Lever boards.</div>
+      <a class="card" href="https://github.com/devtechedge/job-board">
+        <div class="thumb"><img src="docs/screenshots/jobrow.png" alt="Jobrow on GitHub" width="1200" height="600" loading="lazy"></div>
+        <div class="card-body">
+          <div class="repo">Jobrow</div>
+          <p class="what">5,000+ open US tech roles from Greenhouse, Ashby, Lever.</p>
+        </div>
+      </a>
     </li>
   </ul>
 </section>
 
 <section class="reveal">
   <h2>Open source</h2>
-  <p class="stat"><strong>26 merged pull requests</strong> across <strong>17 upstream projects</strong>, including pnpm, Biome, Recharts, node-postgres, SQLMesh, Ruff, cargo-about, and the Stellar developer docs.</p>
-  <ul>
+  <p class="stat"><strong>26 merged PRs</strong> across <strong>17</strong> upstream projects.</p>
+  <ul class="oss">
     <li>
-      <div class="repo"><a href="https://github.com/leo-aa88/reviewgate">reviewgate</a> <span class="count">&middot; 2 merged</span></div>
-      <div class="what">Added a configurable comment-verbosity check on added lines only with a lexer that ignores strings and heredocs, then aligned DESIGN.md Hunk entry state with the shipped code-token rule.</div>
+      <div class="repo"><a href="https://github.com/leo-aa88/reviewgate">reviewgate</a> <span class="count">&middot; 2</span></div>
+      <div class="what">Comment-verbosity check on added lines; DESIGN.md code-token alignment.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/stellar/js-stellar-sdk">js-stellar-sdk</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Extended the docs pipeline to migration pages: Starlight sidebar group and llms.txt bundles with strict link validation.</div>
+      <div class="repo"><a href="https://github.com/stellar/js-stellar-sdk">js-stellar-sdk</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Docs pipeline for migration pages + llms.txt with link validation.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/EmbarkStudios/cargo-about">cargo-about</a> <span class="count">&middot; 2 merged</span></div>
-      <div class="what">Closed a truncated license quote at EOF so synthesized manifests stay valid TOML, then fixed insert offsets to full-manifest coordinates to stop corrupt output and multibyte CRLF panics.</div>
+      <div class="repo"><a href="https://github.com/EmbarkStudios/cargo-about">cargo-about</a> <span class="count">&middot; 2</span></div>
+      <div class="what">TOML license quote + insert-offset fixes for synthesize_manifest.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/astral-sh/ruff">Ruff</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Clarified the PYI002 diagnostic so stub-file sys.platform / version_info checks name their context correctly.</div>
+      <div class="repo"><a href="https://github.com/astral-sh/ruff">Ruff</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Clearer PYI002 messaging for stub-file platform checks.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/PyO3/maturin">maturin</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Windows interpreter discovery no longer panics on non UTF-8 command output. Decoding now uses a lossy path so a localized console cannot crash the build.</div>
+      <div class="repo"><a href="https://github.com/PyO3/maturin">maturin</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Windows interpreter discovery no longer panics on non-UTF-8 output.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/stellar/stellar-docs">stellar-docs</a> <span class="count">&middot; 5 merged</span></div>
-      <div class="what">Documented Quickstart&rsquo;s --enable-core-manual-close flag, reworked a Soroban address example to propagate Result instead of unwrapping, reconciled memo vs muxed guidance, and corrected Freighter&rsquo;s localhost HTTPS claim.</div>
+      <div class="repo"><a href="https://github.com/stellar/stellar-docs">stellar-docs</a> <span class="count">&middot; 5</span></div>
+      <div class="what">Manual-close flag docs, Result-safe XDR example, memo/muxed + Freighter fixes.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/ssf0409/tracelens">tracelens</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Escaped report table cells with html.escape so pipes and HTML in task ids cannot break GitHub step-summary tables.</div>
+      <div class="repo"><a href="https://github.com/ssf0409/tracelens">tracelens</a> <span class="count">&middot; 1</span></div>
+      <div class="what">html.escape on report table cells for safe step summaries.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/pnpm/pnpm">pnpm</a> <span class="count">&middot; 4 merged</span></div>
-      <div class="what">Fixed lockfile:false handling during automatic engine switching, corrected --no-bail semantics for pattern script runs, preserved dependency range and protocol prefixes during updates, and fixed startup crashes on FreeBSD by using the Unix fallback for default_store_dir.</div>
+      <div class="repo"><a href="https://github.com/pnpm/pnpm">pnpm</a> <span class="count">&middot; 4</span></div>
+      <div class="what">lockfile:false, --no-bail, range prefixes, FreeBSD store path.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/web-infra-dev/rspress">Rspress</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Fixed a search initialization race by awaiting FlexSearch indexing before init resolves, so early searches no longer return no results on larger sites.</div>
+      <div class="repo"><a href="https://github.com/web-infra-dev/rspress">Rspress</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Await FlexSearch indexing before search init.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/recharts/recharts">Recharts</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Fixed pointer focus behavior in z-index portal SVG groups and added regression coverage for WebKit focus ring behavior.</div>
+      <div class="repo"><a href="https://github.com/recharts/recharts">Recharts</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Portal SVG focus rings + regression coverage.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/brianc/node-postgres">node-postgres</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Corrected Connection.sync() ending semantics so later socket errors are no longer suppressed.</div>
+      <div class="repo"><a href="https://github.com/brianc/node-postgres">node-postgres</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Connection.sync() no longer swallows later socket errors.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/SQLMesh/sqlmesh">SQLMesh</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Removed a concurrent test construction race involving time_machine and ttl_cache.</div>
+      <div class="repo"><a href="https://github.com/SQLMesh/sqlmesh">SQLMesh</a> <span class="count">&middot; 1</span></div>
+      <div class="what">ModelTest off worker threads; time_machine race fixed.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/anza-xyz/kit">Anza Kit</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Restored correct numeric predicates in an advanced codec documentation example.</div>
+      <div class="repo"><a href="https://github.com/anza-xyz/kit">Anza Kit</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Restored number predicates in codec docs.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/better-auth/better-auth">better-auth</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Locked OpenAPI requestBody regression coverage for the phone number verify endpoint.</div>
+      <div class="repo"><a href="https://github.com/better-auth/better-auth">better-auth</a> <span class="count">&middot; 1</span></div>
+      <div class="what">OpenAPI phone-verify requestBody regression test.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/biomejs/biome">Biome</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Ported the unicorn better-dom-traversing AST rule into the Rust nursery linter, with tests and a release changeset.</div>
+      <div class="repo"><a href="https://github.com/biomejs/biome">Biome</a> <span class="count">&middot; 1</span></div>
+      <div class="what">useBetterDomTraversing nursery rule port.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/thirdweb-dev/js">thirdweb</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Corrected CheckoutWidget token query error propagation for 401, 429, and timeout failures.</div>
+      <div class="repo"><a href="https://github.com/thirdweb-dev/js">thirdweb</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Token query rethrows 401/429/timeout correctly.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/pytest-dev/pytest-env">pytest-env</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Documented native pytest env configuration for pytest.toml and .pytest.toml, closing a gap in the plugin README.</div>
+      <div class="repo"><a href="https://github.com/pytest-dev/pytest-env">pytest-env</a> <span class="count">&middot; 1</span></div>
+      <div class="what">Documented native [pytest] env in pytest.toml.</div>
     </li>
   </ul>
-  <p class="stat" style="margin-top:18px">A full, verifiable ledger of every merged change lives at <a href="https://github.com/devtechedge/oss-contributions">devtechedge/oss-contributions</a>.</p>
+  <p class="stat" style="margin-top:16px">Ledger: <a href="https://github.com/devtechedge/oss-contributions">devtechedge/oss-contributions</a></p>
 </section>
 
 <section class="reveal">
   <h2>Focus</h2>
-  <p>Full stack product engineering. Developer tooling and build infrastructure. AI native applications and agent systems. Web3 and blockchain clients.</p>
-  <p>Comfortable across TypeScript, Python, and Rust. Happiest when the task is finding the real root cause rather than the nearest symptom.</p>
+  <p>Full stack. Dev tooling. AI agents. Web3 clients. TypeScript, Python, Rust.</p>
 </section>
 
 <footer class="reveal">
-  <p>Get in touch at <a href="mailto:devtechedge@gmail.com">devtechedge@gmail.com</a>. &middot; <a href="/privacy">Privacy policy</a></p>
+  <p><a href="mailto:devtechedge@gmail.com">devtechedge@gmail.com</a> &middot; <a href="/privacy">Privacy</a></p>
 </footer>
 
 </div>
 
 <script>
 (function () {
+  var root = document.documentElement;
+  var darkBtn = document.getElementById("theme-dark");
+  var lightBtn = document.getElementById("theme-light");
+  var themeMeta = document.getElementById("theme-color");
+
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    darkBtn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+    lightBtn.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+    if (themeMeta) themeMeta.setAttribute("content", theme === "light" ? "#f4f6fa" : "#07090d");
+    try { localStorage.setItem("theme", theme); } catch (e) {}
+  }
+
+  applyTheme(root.getAttribute("data-theme") || "dark");
+  darkBtn.addEventListener("click", function () { applyTheme("dark"); });
+  lightBtn.addEventListener("click", function () { applyTheme("light"); });
+
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var boot = document.getElementById("boot");
   var linesEl = document.getElementById("boot-lines");
@@ -569,24 +594,19 @@
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
     nodes.forEach(function (n, i) {
-      n.style.transitionDelay = (i * 0.06) + "s";
+      n.style.transitionDelay = (i * 0.05) + "s";
       io.observe(n);
     });
   }
 
-  if (reduced) {
-    finish();
-    return;
-  }
+  if (reduced) { finish(); return; }
 
   var lines = [
-    { t: "> mount /portfolio", c: "" },
-    { t: "> load modules: about, work, oss", c: "" },
-    { t: "> handshake upstream ledger ... ", c: "ok", s: "ok" },
-    { t: "> hydrate telemetry stream ... ", c: "ok", s: "ok" },
-    { t: "> systems ready", c: "accent" }
+    { t: "> mount /portfolio" },
+    { t: "> load work + oss" },
+    { t: "> handshake ledger ... ", s: "ok" },
+    { t: "> ready", c: "accent" }
   ];
-
   var i = 0;
   var started = performance.now();
   var DURATION = 3000;
@@ -611,13 +631,11 @@
   function tick(now) {
     var elapsed = now - started;
     setProgress((elapsed / DURATION) * 100);
-
     var nextAt = (i + 1) * (DURATION / (lines.length + 1));
     if (i < lines.length && elapsed >= nextAt) {
       addLine(lines[i]);
       i += 1;
     }
-
     if (elapsed < DURATION) {
       requestAnimationFrame(tick);
     } else {
@@ -626,7 +644,7 @@
       cursor.className = "line show accent";
       cursor.innerHTML = '> launch<span class="cursor"></span>';
       linesEl.appendChild(cursor);
-      setTimeout(finish, 280);
+      setTimeout(finish, 250);
     }
   }
 
