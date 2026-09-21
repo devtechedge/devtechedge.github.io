@@ -56,7 +56,7 @@
 <header>
   <h1>Devayan Mandal</h1>
   <p class="aka">Dev M &middot; Mumbai, India</p>
-  <p class="lede">Full stack AI native engineer and open source contributor. I build production software, developer tooling, and AI systems.</p>
+  <p class="lede">Full stack AI native engineer and open source contributor. I build production AI systems, developer tooling, and full-stack products end to end.</p>
   <nav class="links">
     <a href="https://github.com/devtechedge">GitHub</a>
     <a href="https://www.linkedin.com/in/dev-ma">LinkedIn</a>
@@ -67,56 +67,107 @@
 <section>
   <h2>About</h2>
   <p>I run Lattice AI Labs, an independent software consultancy. Most of my work is full stack: TypeScript and Python on the product side, Rust and systems programming when the problem calls for it.</p>
+  <p>Focus is bounded autonomy: explicit state machines over opaque prompt chains, deterministic evaluation over fuzzy judgment, and observable execution with clear human oversight. I have shipped 35+ production-grade systems spanning agents, MCP, RLVR eval, realtime infra, and Web3.</p>
   <p>I contribute upstream to the tools I depend on. Fixing a real bug in a widely used library and getting it merged teaches more than building another demo.</p>
 </section>
 
 <section>
-  <h2>Open source</h2>
-  <p class="stat"><strong>21 merged pull requests</strong> across <strong>14 upstream projects</strong>, including pnpm, Biome, Recharts, node-postgres, SQLMesh, and the Stellar developer docs.</p>
+  <h2>Selected work</h2>
   <ul>
     <li>
-      <div class="repo"><a href="https://github.com/pnpm/pnpm">pnpm</a> <span class="count">&middot; 4 merged</span></div>
-      <div class="what">Fixed lockfile:false handling during automatic engine switching, corrected --no-bail semantics for pattern script runs, preserved dependency range and protocol prefixes during updates, and fixed startup crashes on FreeBSD by using the Unix fallback for default_store_dir.</div>
+      <div class="repo"><a href="https://github.com/devtechedge/aegis_vercel">AEGIS</a></div>
+      <div class="what">Multi-agent ops cortex with supervisor routing, HITL gates, Hybrid RAG, and live SSE telemetry.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/stellar/stellar-docs">stellar-docs</a> <span class="count">&middot; 5 merged</span></div>
-      <div class="what">Reworked a Soroban address conversion example to propagate a fallible Result instead of unwrapping and panicking on malformed XDR, reconciled contradictory memo guidance, and corrected a blanket HTTPS claim about Freighter that ignored localhost trust rules.</div>
+      <div class="repo"><a href="https://github.com/devtechedge/synthesis">Synthesis</a></div>
+      <div class="what">Autonomous research pipeline with Reflexion, HITL approval, RAG, and a streaming eval gate.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/devtechedge/aarop">AAROP</a></div>
+      <div class="what">Inspectable Perceive&ndash;Plan&ndash;Act&ndash;Observe&ndash;Reflect&ndash;Adapt engine with 99% Python test coverage.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/devtechedge/healthcare-deep-memory-agents">Cadence</a></div>
+      <div class="what">Framework-free healthcare agent with five-layer clinical memory and consent-scoped briefs.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/devtechedge/chaos-simulator">Chaos Simulator</a></div>
+      <div class="what">Real-time chaos engineering dashboard with animated topology and live recovery telemetry.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/devtechedge/job-board">Jobrow</a></div>
+      <div class="what">Table-first index of 5,000+ open US tech roles from public Greenhouse, Ashby, and Lever boards.</div>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2>Open source</h2>
+  <p class="stat"><strong>26 merged pull requests</strong> across <strong>17 upstream projects</strong>, including pnpm, Biome, Recharts, node-postgres, SQLMesh, Ruff, cargo-about, and the Stellar developer docs.</p>
+  <ul>
+    <li>
+      <div class="repo"><a href="https://github.com/leo-aa88/reviewgate">reviewgate</a> <span class="count">&middot; 2 merged</span></div>
+      <div class="what">Added a configurable comment-verbosity check on added lines only with a lexer that ignores strings and heredocs, then aligned DESIGN.md Hunk entry state with the shipped code-token rule.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/stellar/js-stellar-sdk">js-stellar-sdk</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Extended the docs pipeline to migration pages: Starlight sidebar group and llms.txt bundles with strict link validation.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/EmbarkStudios/cargo-about">cargo-about</a> <span class="count">&middot; 2 merged</span></div>
+      <div class="what">Closed a truncated license quote at EOF so synthesized manifests stay valid TOML, then fixed insert offsets to full-manifest coordinates to stop corrupt output and multibyte CRLF panics.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/astral-sh/ruff">Ruff</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Clarified the PYI002 diagnostic so stub-file sys.platform / version_info checks name their context correctly.</div>
     </li>
     <li>
       <div class="repo"><a href="https://github.com/PyO3/maturin">maturin</a> <span class="count">&middot; 1 merged</span></div>
       <div class="what">Windows interpreter discovery no longer panics on non UTF-8 command output. Decoding now uses a lossy path so a localized console cannot crash the build.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/biomejs/biome">Biome</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Ported the unicorn better-dom-traversing AST rule into the Rust nursery linter, with tests and a release changeset.</div>
+      <div class="repo"><a href="https://github.com/stellar/stellar-docs">stellar-docs</a> <span class="count">&middot; 5 merged</span></div>
+      <div class="what">Documented Quickstart&rsquo;s --enable-core-manual-close flag, reworked a Soroban address example to propagate Result instead of unwrapping, reconciled memo vs muxed guidance, and corrected Freighter&rsquo;s localhost HTTPS claim.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/brianc/node-postgres">node-postgres</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Corrected Connection.sync() ending semantics so later socket errors are no longer suppressed.</div>
+      <div class="repo"><a href="https://github.com/ssf0409/tracelens">tracelens</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Escaped report table cells with html.escape so pipes and HTML in task ids cannot break GitHub step-summary tables.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/recharts/recharts">Recharts</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Fixed pointer focus behavior in z-index portal SVG groups and added regression coverage for WebKit focus ring behavior.</div>
-    </li>
-    <li>
-      <div class="repo"><a href="https://github.com/SQLMesh/sqlmesh">SQLMesh</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Removed a concurrent test construction race involving time_machine and ttl_cache.</div>
+      <div class="repo"><a href="https://github.com/pnpm/pnpm">pnpm</a> <span class="count">&middot; 4 merged</span></div>
+      <div class="what">Fixed lockfile:false handling during automatic engine switching, corrected --no-bail semantics for pattern script runs, preserved dependency range and protocol prefixes during updates, and fixed startup crashes on FreeBSD by using the Unix fallback for default_store_dir.</div>
     </li>
     <li>
       <div class="repo"><a href="https://github.com/web-infra-dev/rspress">Rspress</a> <span class="count">&middot; 1 merged</span></div>
       <div class="what">Fixed a search initialization race by awaiting FlexSearch indexing before init resolves, so early searches no longer return no results on larger sites.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/thirdweb-dev/js">thirdweb</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Corrected CheckoutWidget token query error propagation for 401, 429, and timeout failures.</div>
+      <div class="repo"><a href="https://github.com/recharts/recharts">Recharts</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Fixed pointer focus behavior in z-index portal SVG groups and added regression coverage for WebKit focus ring behavior.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/brianc/node-postgres">node-postgres</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Corrected Connection.sync() ending semantics so later socket errors are no longer suppressed.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/SQLMesh/sqlmesh">SQLMesh</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Removed a concurrent test construction race involving time_machine and ttl_cache.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/anza-xyz/kit">Anza Kit</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Restored correct numeric predicates in an advanced codec documentation example.</div>
     </li>
     <li>
       <div class="repo"><a href="https://github.com/better-auth/better-auth">better-auth</a> <span class="count">&middot; 1 merged</span></div>
       <div class="what">Locked OpenAPI requestBody regression coverage for the phone number verify endpoint.</div>
     </li>
     <li>
-      <div class="repo"><a href="https://github.com/anza-xyz/kit">Anza Kit</a> <span class="count">&middot; 1 merged</span></div>
-      <div class="what">Restored correct numeric predicates in an advanced codec documentation example.</div>
+      <div class="repo"><a href="https://github.com/biomejs/biome">Biome</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Ported the unicorn better-dom-traversing AST rule into the Rust nursery linter, with tests and a release changeset.</div>
+    </li>
+    <li>
+      <div class="repo"><a href="https://github.com/thirdweb-dev/js">thirdweb</a> <span class="count">&middot; 1 merged</span></div>
+      <div class="what">Corrected CheckoutWidget token query error propagation for 401, 429, and timeout failures.</div>
     </li>
     <li>
       <div class="repo"><a href="https://github.com/pytest-dev/pytest-env">pytest-env</a> <span class="count">&middot; 1 merged</span></div>
