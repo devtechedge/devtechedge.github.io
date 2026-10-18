@@ -4,6 +4,15 @@ on:
   repository_dispatch:
     types: [oss-stats-refresh]
   workflow_dispatch:
+    inputs:
+      merged_count:
+        description: Authored merged pull request count
+        required: true
+        type: string
+      repo_count:
+        description: Distinct upstream project count
+        required: true
+        type: string
 
 concurrency:
   group: sync-oss-stats
@@ -21,39 +30,31 @@ jobs:
 
       - name: Refresh stat line from ledger
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGED_COUNT: ${{ github.event.client_payload.merged_count || github.event.inputs.merged_count }}
+          REPO_COUNT: ${{ github.event.client_payload.repo_count || github.event.inputs.repo_count }}
         run: |
           set -euo pipefail
           python3 - <<'EOF'
-          import base64, json, os, re, urllib.request
-          token = os.environ["GITHUB_TOKEN"]
-          req = urllib.request.Request(
-              "https://api.github.com/repos/devtechedge/oss-contributions/contents/docs/triage/publications.json",
-              headers={"Accept": "application/vnd.github+json",
-                       "X-GitHub-Api-Version": "2022-11-28",
-                       "Authorization": f"Bearer {token}",
-                       "User-Agent": "devtechedge-site-stats-sync"})
-          with urllib.request.urlopen(req, timeout=30) as res:
-              payload = json.load(res)
-          pubs = json.loads(base64.b64decode(payload["content"]).decode("utf-8"))
-          recs = pubs.get("records", [])
-          n = len(recs)
-          repos = sorted({r["repo"] for r in recs})
+          import os, re
+          n = os.environ.get("MERGED_COUNT", "")
+          repos = os.environ.get("REPO_COUNT", "")
+          if not n.isdigit() or not repos.isdigit():
+              raise SystemExit("merged_count and repo_count must be integers")
           path = "index.html"
           with open(path, encoding="utf-8") as f:
               text = f.read()
           new, count = re.subn(
               r"<strong>\d+ merged PRs</strong> across <strong>\d+</strong> upstream projects\.",
-              f"<strong>{n} merged PRs</strong> across <strong>{len(repos)}</strong> upstream projects.",
+              f"<strong>{int(n)} merged PRs</strong> across <strong>{int(repos)}</strong> upstream projects.",
               text)
           if count == 0:
               raise SystemExit("stat line anchor not found")
           if new != text:
               with open(path, "w", encoding="utf-8", newline="\n") as f:
                   f.write(new)
-              print(f"updated: {n} PRs across {len(repos)} repos")
+              print(f"updated: {int(n)} PRs across {int(repos)} repos")
           else:
-              print(f"no change: {n} PRs across {len(repos)} repos")
+              print(f"no change: {int(n)} PRs across {int(repos)} repos")
           EOF
 
       - name: Commit stat if changed
